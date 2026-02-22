@@ -15,16 +15,17 @@ if ($result === false) {
 }
 
 $data = json_decode($result, true);
-
 curl_close($ch);
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>La próxima película de Marvel</title>
+    <title>Próxima película de Marvel</title>
     <meta name="description" content="La próxima película de Marvel">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- PicoCSS -->
     <link 
         rel="stylesheet" 
         href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css">
@@ -32,86 +33,120 @@ curl_close($ch);
 
 <body>
 <main>
-    <div class="card animar">
-    <section>
-        <img src="<?=  $data["poster_url"]; ?> width="300" alt="poster de <?=  $data["title"] ?>"
-        style="border-radius: 16px;" />
-    </section>
-    <hgroup>
-        <h3><?= $data["title"]; ?> se estrena en <?= $data["days_until"]; ?> días</h3>
-        <p>Fecha de estreno <?= $data["release_date"]; ?></p>
-        <p>La siguiente es <?= $data["following_production"]["title"]; ?></p>
-    </hgroup>
+    <div class="card">
+        <section>
+            <img 
+                src="<?= $data["poster_url"]; ?>" 
+                alt="Poster de <?= $data["title"]; ?>">
+        </section>
+
+        <hgroup>
+            <h3><?= $data["title"]; ?> se estrena en <?= $data["days_until"]; ?> días</h3>
+            <p>Fecha de estreno: <?= $data["release_date"]; ?></p>
+            <p>La siguiente es: <?= $data["following_production"]["title"]; ?></p>
+        </hgroup>
     </div>
 </main>
 </body>
 </html>
+
 <style>
-    :root{
-        color: light dark;
-    }
-
-    body{
-        display: grid;
-        place-content: center;
-        height: 100vh;
-        background: linear-gradient(45deg, #9e2906, #000000, #02176e);
-        background-size: 400% 400%;
-        animation: gradient 12s ease-in infinite;
-    }
-    @keyframes gradient{
-            0%{
-            background-position: 0% 50%;
-        }
-            50%{
-            background-position: 100% 50%;
-        }
-            100%{
-            background-position: 0% 50%;
-        }
-    }
-    
-    section{
-        display: flex;
-        justify-content: center;
-        text-align: center;
-    }
-
-    hgroup{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-    }
-   
-
-    img{
-        margin: 0 auto;
-        animation: flotar 3s ease-in-out infinite;
-    }
-
-    @keyframes flotar{
-        0%{transform: translateY(10px);}
-        50%{transform: translateY(-25px);}
-        100%{ transform: translateY(10px);}
-    }
-    h3, p {
-    font-size: 49px;   
-    opacity: 0;
-    animation: aparecer 0.6s ease forwards;
+:root {
+    color-scheme: light dark;
 }
 
-    .delay-1 { animation-delay: 0.75s; }
-    .delay-2 { animation-delay: 0.70s; }
-    .delay-3 { animation-delay: 0.65s; }
+* {
+    box-sizing: border-box;
+}
 
-    @keyframes aparecer {
-        to {
-            opacity: 1;
-            transform: translateY(10px);
-        }
+/* BODY */
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: grid;
+    place-content: center;
+    padding: 1rem;
+    background: linear-gradient(45deg, #9e2906, #000000, #02176e);
+    background-size: 400% 400%;
+    animation: gradient 12s ease-in-out infinite;
+}
+
+/* Fondo animado */
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* CARD */
+.card {
+    width: 100%;
+    max-width: 420px;
+    padding: 1.5rem;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+/* SECCIÓN IMAGEN */
+section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+/* IMAGEN */
+img {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    border-radius: 16px;
+    animation: flotar 3s ease-in-out infinite;
+}
+
+/* Animación imagen */
+@keyframes flotar {
+    0% { transform: translateY(10px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(10px); }
+}
+
+/* TEXTO */
+hgroup {
+    text-align: center;
+}
+
+/* Texto responsivo */
+h3 {
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    margin-bottom: 0.5rem;
+}
+
+p {
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    margin: 0.2rem 0;
+}
+
+/* Animación texto */
+h3, p {
+    opacity: 0;
+    animation: aparecer 0.7s ease forwards;
+}
+
+@keyframes aparecer {
+    to {
+        opacity: 1;
+        transform: translateY(8px);
     }
-    main{
-        margin-top: 75px;
+}
+
+/* TABLET Y LAPTOP */
+@media (min-width: 768px) {
+    .card {
+        max-width: 520px;
     }
+
+    img {
+        max-width: 320px;
+    }
+}
 </style>
